@@ -1,6 +1,6 @@
 # xampp
 
-> Shell script for controlling XAMPP (LAMPP) Server
+> Shell script for easily controlling XAMPP (LAMPP) Server
 
 
 ## Installation
