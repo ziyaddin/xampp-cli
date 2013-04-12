@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# Script Name: XAMPP (XAMPP Starter)
+# Script Author: Ziyaddin Sadigov
+# Script URL: http://github.com/ziyaddin/xampp
+# Author URL: http://twitter.com/zsadigov
+#
+
+if [ "$1" == "start" ]; then
+	sudo /opt/lampp/lampp start
+
+elif [ "$1" == "stop" ]; then
+	sudo /opt/lampp/lampp stop
+
+elif [ "$1" == "restart" ]; then
+	sudo /opt/lampp/lampp restart
+
+elif [ "$1" == "startapache" ]; then
+	sudo /opt/lampp/lampp startapache
+
+elif [ "$1" == "startssl" ]; then
+	sudo /opt/lampp/lampp startssl
+
+elif [ "$1" == "startmysql" ]; then
+	sudo /opt/lampp/lampp startmysql
+
+elif [ "$1" == "startftp" ]; then
+	sudo /opt/lampp/lampp startftp
+
+elif [ "$1" == "stopapache" ]; then
+	sudo /opt/lampp/lampp stopapache
+
+elif [ "$1" == "stopssl" ]; then
+	sudo /opt/lampp/lampp stopssl
+
+elif [ "$1" == "stopmysql" ]; then
+	sudo /opt/lampp/lampp stopmysql
+
+elif [ "$1" == "stopftp" ]; then
+	sudo /opt/lampp/lampp stopftp
+
+elif [ "$1" == "security" ]; then
+	sudo /opt/lampp/lampp security
+
+elif [ "$1" == "help" ]; then
+	echo "For Help Visit http://github.com/ziyaddin/xampp"
+	
+else
+	echo "
+		start 			-- Start XAMPP
+		stop  			-- Stop XAMPP
+		restart			-- Restart XAMPP
+		startapache 		-- Start Apache
+		startssl		-- Start SSL
+		startmysql		-- Start MySQL
+		startftp		-- Start FTP
+		stopapache		-- Stop Apache
+		stopssl			-- Stop SSL
+		stopmysql		-- Stop MySQL
+		stopftp			-- Stop FTP
+		security		-- Security Settings
+		help  			-- Help
+	"
+fi
+
