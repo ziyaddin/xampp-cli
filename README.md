@@ -2,6 +2,14 @@
 
 > Shell script for easily controlling XAMPP (LAMPP) Server
 
+<pre>
+ #    #    ##    #    #  #####   #####
+  #  #    #  #   ##  ##  #    #  #    #
+   ##    #    #  # ## #  #    #  #    #
+   ##    ######  #    #  #####   #####
+  #  #   #    #  #    #  #       #
+ #    #  #    #  #    #  #       #
+</pre>
 
 ## Installation
 
