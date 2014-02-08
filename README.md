@@ -1,5 +1,5 @@
 # xampp
-
+![Terminal](xampp.png)
 > Shell script for easily controlling XAMPP (LAMPP) Server
 
 <pre>
