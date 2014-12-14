@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # XAMPP-CLI
-# ----------------------
+# ------------------------
 # Command line interface for a XAMPP
 # 
 # Based on XAMPP (XAMPP Starter) by Ziyaddin Sadigov:
@@ -10,20 +10,14 @@
 # Author: Denys Dovhan (email@denysdovhan.com)
 # 
 
+# Start commands
+# -------------------
+
 if [ "$1" == "start" ]; then
   sudo /opt/lampp/lampp start
 
-elif [ "$1" == "stop" ]; then
-  sudo /opt/lampp/lampp stop
-
-elif [ "$1" == "restart" ]; then
-  sudo /opt/lampp/lampp restart
-
 elif [ "$1" == "startapache" ]; then
   sudo /opt/lampp/lampp startapache
-
-elif [ "$1" == "startssl" ]; then
-  sudo /opt/lampp/lampp startssl
 
 elif [ "$1" == "startmysql" ]; then
   sudo /opt/lampp/lampp startmysql
@@ -31,11 +25,14 @@ elif [ "$1" == "startmysql" ]; then
 elif [ "$1" == "startftp" ]; then
   sudo /opt/lampp/lampp startftp
 
+# Stop commands
+# -------------------
+
+elif [ "$1" == "stop" ]; then
+  sudo /opt/lampp/lampp stop
+
 elif [ "$1" == "stopapache" ]; then
   sudo /opt/lampp/lampp stopapache
-
-elif [ "$1" == "stopssl" ]; then
-  sudo /opt/lampp/lampp stopssl
 
 elif [ "$1" == "stopmysql" ]; then
   sudo /opt/lampp/lampp stopmysql
@@ -43,27 +40,85 @@ elif [ "$1" == "stopmysql" ]; then
 elif [ "$1" == "stopftp" ]; then
   sudo /opt/lampp/lampp stopftp
 
+# Reload commands
+# -------------------
+
+elif [ "$1" == "reload" ]; then
+  sudo /opt/lampp/lampp reload
+
+elif [ "$1" == "reloadapache" ]; then
+  sudo /opt/lampp/lampp reloadapache
+
+elif [ "$1" == "reloadmysql" ]; then
+  sudo /opt/lampp/lampp reloadmysql
+
+elif [ "$1" == "reloadftp" ]; then
+  sudo /opt/lampp/lampp reloadftp
+
+# SSL commands
+# -------------------
+
+elif [ "$1" == "enablessl" ]; then
+  sudo /opt/lampp/lampp enablessl
+
+elif [ "$1" == "disablessl" ]; then
+  sudo /opt/lampp/lampp disablessl
+
+# Other commands
+# -------------------
+
+elif [ "$1" == "restart" ]; then
+  sudo /opt/lampp/lampp restart
+
 elif [ "$1" == "security" ]; then
   sudo /opt/lampp/lampp security
 
-elif [ "$1" == "help" ]; then
-  echo "For Help Visit http://github.com/ziyaddin/xampp"
-  
+elif [ "$1" == "backup" ]; then
+  sudo /opt/lampp/lampp backup
+
+elif [ "$1" == "oci8" ]; then
+  sudo /opt/lampp/lampp oci8
+
+# Custom commands
+# -------------------
+
+elif [ "$1" == "gui" ]; then
+  gksu /opt/lampp/manager-linux-*.run &
+
+# 
+# 
+# 
+# 
+# panel         Starts graphical XAMPP control panel
+
+
 else
   echo "
-    start       -- Start XAMPP
-    stop        -- Stop XAMPP
-    restart     -- Restart XAMPP
-    startapache     -- Start Apache
-    startssl    -- Start SSL
-    startmysql    -- Start MySQL
-    startftp    -- Start FTP
-    stopapache    -- Stop Apache
-    stopssl     -- Stop SSL
-    stopmysql   -- Stop MySQL
-    stopftp     -- Stop FTP
-    security    -- Security Settings
-    help        -- Help
-  "
-fi
+Usage: xampp <command>
 
+  start         Start XAMPP (Apache, MySQL and eventually others)
+  startapache   Start only Apache
+  startmysql    Start only MySQL
+  startftp      Start only ProFTPD
+
+  stop          Stop XAMPP (Apache, MySQL and eventually others)
+  stopapache    Stop only Apache
+  stopmysql     Stop only MySQL
+  stopftp       Stop only ProFTPD
+
+  reload        Reload XAMPP (Apache, MySQL and eventually others)
+  reloadapache  Reload only Apache
+  reloadmysql   Reload only MySQL
+  reloadftp     Reload only ProFTPD
+
+  enablessl     Enable SSL support for Apache
+  disablessl    Disable SSL support for Apache
+
+  restart       Stop and start XAMPP
+  security      Check XAMPP's security
+  backup        Make backup file of your XAMPP config, log and data files
+  oci8          Enable the oci8 extenssion
+
+  gui           Graphic interface for XAMPP
+"
+fi
