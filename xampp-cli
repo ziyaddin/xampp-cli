@@ -10,87 +10,33 @@
 # Author: Denys Dovhan (email@denysdovhan.com)
 # 
 
-# Start commands
-# -------------------
 
-if [ "$1" == "start" ]; then
-  sudo /opt/lampp/lampp start
+# Default commands
+# -----------------
 
-elif [ "$1" == "startapache" ]; then
-  sudo /opt/lampp/lampp startapache
+DEFAULT_COMMANDS="
+  start  startapache  startmysql  startftp
+  stop   stopapache   stopmysql   stopftp 
+  reload reloadapache reloadmysql reloadftp
+  backup restart      security    oci8
+  enablessl disablessl"
 
-elif [ "$1" == "startmysql" ]; then
-  sudo /opt/lampp/lampp startmysql
+# Check if user have sudo access
+# Usage: check_sudo
+function check_sudo {
+  if [ "$EUID" -ne 0 ]; then
+    echo "(!)You need to be root to perform this action."
+    exit
+  fi
+}
 
-elif [ "$1" == "startftp" ]; then
-  sudo /opt/lampp/lampp startftp
 
-# Stop commands
-# -------------------
+if [[ ! -z $1 ]]; then
+  if [[ $DEFAULT_COMMANDS =~ $1 ]]; then
+    /opt/lampp/lampp $1
 
-elif [ "$1" == "stop" ]; then
-  sudo /opt/lampp/lampp stop
-
-elif [ "$1" == "stopapache" ]; then
-  sudo /opt/lampp/lampp stopapache
-
-elif [ "$1" == "stopmysql" ]; then
-  sudo /opt/lampp/lampp stopmysql
-
-elif [ "$1" == "stopftp" ]; then
-  sudo /opt/lampp/lampp stopftp
-
-# Reload commands
-# -------------------
-
-elif [ "$1" == "reload" ]; then
-  sudo /opt/lampp/lampp reload
-
-elif [ "$1" == "reloadapache" ]; then
-  sudo /opt/lampp/lampp reloadapache
-
-elif [ "$1" == "reloadmysql" ]; then
-  sudo /opt/lampp/lampp reloadmysql
-
-elif [ "$1" == "reloadftp" ]; then
-  sudo /opt/lampp/lampp reloadftp
-
-# SSL commands
-# -------------------
-
-elif [ "$1" == "enablessl" ]; then
-  sudo /opt/lampp/lampp enablessl
-
-elif [ "$1" == "disablessl" ]; then
-  sudo /opt/lampp/lampp disablessl
-
-# Other commands
-# -------------------
-
-elif [ "$1" == "restart" ]; then
-  sudo /opt/lampp/lampp restart
-
-elif [ "$1" == "security" ]; then
-  sudo /opt/lampp/lampp security
-
-elif [ "$1" == "backup" ]; then
-  sudo /opt/lampp/lampp backup
-
-elif [ "$1" == "oci8" ]; then
-  sudo /opt/lampp/lampp oci8
-
-# Custom commands
-# -------------------
-
-elif [ "$1" == "gui" ]; then
-  gksu /opt/lampp/manager-linux-*.run &
-
-# 
-# 
-# 
-# 
-# panel         Starts graphical XAMPP control panel
-
+  elif [[ $1 == "gui" ]]; then
+    gksu /opt/lampp/manager-linux*.run &
 
 else
   echo "
