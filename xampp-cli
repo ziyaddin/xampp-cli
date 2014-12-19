@@ -12,8 +12,6 @@
 
 
 # Default commands
-# -----------------
-
 DEFAULT_COMMANDS="
   start  startapache  startmysql  startftp
   stop   stopapache   stopmysql   stopftp 
@@ -30,14 +28,75 @@ function check_sudo {
   fi
 }
 
+# Add new host to vhosts.conf
+# Usage: add_host <domain> <projectDir>
+function add_host {
+  check_sudo
+  # If the directory doesn't exist, create it
+  if [[ ! -d $2 ]]; then echo "Make directory $2." && mkdir $2; fi;
+  # Make link from `projectDir` to `htdocs/projectDir`
+  ln -s `(cd $2 && pwd)` /opt/lampp/htdocs/$1
 
+  echo "Please answer some questions or confirm default values:"
+  read -p "ServerAdmin (admin@$1): " ADMIN
+  read -p "ErrorLog (logs/$1-error_log): " ERROR_LOG
+  read -p "CustomLog (logs/$1-access_log): " ACCESS_LOG
+
+  # If variables aren`t entered, set default values
+  : ${ADMIN:="admin@$1"}
+  : ${ERROR_LOG:="logs/$1-error_log"}
+  : ${ACCESS_LOG:="logs/$1-access_log"}
+
+  printf "
+<VirtualHost *:80>
+\tServerAdmin $ADMIN
+\tDocumentRoot \"/opt/lampp/htdocs/$1\"
+\tServerName $1
+\tServerAlias www.$1
+\tErrorLog \"$ERROR_LOG\"
+\tCustomLog \"$ACCESS_LOG\" common
+</VirtualHost>" >> /opt/lampp/etc/extra/httpd-vhosts.conf
+
+  echo "127.0.1.1 $1" >> /etc/hosts
+
+  echo "New host $1 from the directory $2 has been successfully added."
+}
+
+
+# Check if arguments entered
 if [[ ! -z $1 ]]; then
+
+  # If entered argument are default commands, execute them
   if [[ $DEFAULT_COMMANDS =~ $1 ]]; then
     /opt/lampp/lampp $1
 
+  # For `gui` run xampp-manager with gksu
+  # If this command has been started with sudo privileges, open the manager without gksu 
   elif [[ $1 == "gui" ]]; then
     gksu /opt/lampp/manager-linux*.run &
 
+  # Command for adding new hosts
+  # Usage: sudo xampp add <domain> <projectDir>
+  elif [[ $1 == "add" ]]; then
+    # Check entered arguments
+    case $# in
+      3 ) # sudo xammpp add <domain> <projectDir>
+        add_host $2 $3
+        ;;
+      2 ) # sudo xampp add <domain>
+        add_host $2 $2
+        ;;
+      * ) # Wrong number of arguments
+        echo "Wrong number of arguments have been entered."
+        exit
+        ;;
+    esac
+
+  else
+    echo "Else case"
+  fi
+
+# If arguments aren't entered, output help
 else
   echo "
 Usage: xampp <command>
