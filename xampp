@@ -6,60 +6,58 @@
 # Author URL: http://twitter.com/zsadigov
 #
 
-if [ "$1" == "start" ]; then
-	sudo /opt/lampp/lampp start
+# Default commands
+DEFAULT_COMMANDS="
+  start  startapache  startmysql  startftp
+  stop   stopapache   stopmysql   stopftp 
+  reload reloadapache reloadmysql reloadftp
+  backup restart      security    oci8
+  enablessl disablessl"
 
-elif [ "$1" == "stop" ]; then
-	sudo /opt/lampp/lampp stop
+# Check if arguments entered
+if [[ ! -z $1 ]]; then
 
-elif [ "$1" == "restart" ]; then
-	sudo /opt/lampp/lampp restart
+  # If entered argument are default commands, execute them
+  if [[ $DEFAULT_COMMANDS =~ $1 ]]; then
+    /opt/lampp/lampp $1
 
-elif [ "$1" == "startapache" ]; then
-	sudo /opt/lampp/lampp startapache
+  # For `gui` run xampp-manager with gksu
+  # If this command has been started with sudo privileges, open the manager without gksu 
+  elif [[ $1 == "gui" ]]; then
+    gksu /opt/lampp/manager-linux*.run &
 
-elif [ "$1" == "startssl" ]; then
-	sudo /opt/lampp/lampp startssl
+  else
+    echo "Unknown command."
+  fi
 
-elif [ "$1" == "startmysql" ]; then
-	sudo /opt/lampp/lampp startmysql
-
-elif [ "$1" == "startftp" ]; then
-	sudo /opt/lampp/lampp startftp
-
-elif [ "$1" == "stopapache" ]; then
-	sudo /opt/lampp/lampp stopapache
-
-elif [ "$1" == "stopssl" ]; then
-	sudo /opt/lampp/lampp stopssl
-
-elif [ "$1" == "stopmysql" ]; then
-	sudo /opt/lampp/lampp stopmysql
-
-elif [ "$1" == "stopftp" ]; then
-	sudo /opt/lampp/lampp stopftp
-
-elif [ "$1" == "security" ]; then
-	sudo /opt/lampp/lampp security
-
-elif [ "$1" == "help" ]; then
-	echo "For Help Visit http://github.com/ziyaddin/xampp"
-	
+# If arguments aren't entered, output help
 else
-	echo "
-		start 			-- Start XAMPP
-		stop  			-- Stop XAMPP
-		restart			-- Restart XAMPP
-		startapache 		-- Start Apache
-		startssl		-- Start SSL
-		startmysql		-- Start MySQL
-		startftp		-- Start FTP
-		stopapache		-- Stop Apache
-		stopssl			-- Stop SSL
-		stopmysql		-- Stop MySQL
-		stopftp			-- Stop FTP
-		security		-- Security Settings
-		help  			-- Help
-	"
-fi
+  echo "
+Usage: xampp <command>
 
+  start         Start XAMPP (Apache, MySQL and eventually others)
+  startapache   Start only Apache
+  startmysql    Start only MySQL
+  startftp      Start only ProFTPD
+
+  stop          Stop XAMPP (Apache, MySQL and eventually others)
+  stopapache    Stop only Apache
+  stopmysql     Stop only MySQL
+  stopftp       Stop only ProFTPD
+
+  reload        Reload XAMPP (Apache, MySQL and eventually others)
+  reloadapache  Reload only Apache
+  reloadmysql   Reload only MySQL
+  reloadftp     Reload only ProFTPD
+
+  enablessl     Enable SSL support for Apache
+  disablessl    Disable SSL support for Apache
+
+  restart       Stop and start XAMPP
+  security      Check XAMPP's security
+  backup        Make backup file of your XAMPP config, log and data files
+  oci8          Enable the oci8 extenssion
+
+  gui           Graphic interface for XAMPP
+"
+fi
