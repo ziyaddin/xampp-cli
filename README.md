@@ -22,9 +22,9 @@ sh installer
 
 ## Help
 
-<p>Open your <code>Terminal</code> and type:</p>
+<p>Open your <code>Terminal</code> and type <code>xampp</code> without arguments:</p>
 ```bash
-xampp help
+xampp
 ```
 
 
