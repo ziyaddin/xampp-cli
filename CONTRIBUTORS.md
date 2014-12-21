@@ -1,3 +1,3 @@
 # Contributors
 
-* [Denis Dovhan](https://github.com/denysdovhan)
+* [Denys Dovhan](https://github.com/denysdovhan)
