@@ -34,9 +34,9 @@ function add_host {
   check_sudo
 
   echo "Please answer some questions or confirm default values:"
-  read -p "? ServerAdmin (admin@$1): " ADMIN
-  read -p "? ErrorLog (logs/$1-error_log): " ERROR_LOG
-  read -p "? CustomLog (logs/$1-access_log): " ACCESS_LOG
+  echo -en "\033[32m?\033[0m ServerAdmin \033[2;37m(admin@$1)\033[0m: " && read ADMIN
+  echo -en "\033[32m?\033[0m ErrorLog \033[2;37m(logs/$1-error_log)\033[0m: " && read ERROR_LOG
+  echo -en "\033[32m?\033[0m CustomLog \033[2;37m(logs/$1-access_log)\033[0m: " && read ACCESS_LOG
 
   # If variables aren`t entered, set default values
   : ${ADMIN:="admin@$1"}
@@ -44,7 +44,7 @@ function add_host {
   : ${ACCESS_LOG:="logs/$1-access_log"}
 
   # If the directory doesn't exist, create it
-  if [[ ! -d $2 ]]; then echo "Make directory $2" && mkdir $2; fi;
+  if [[ ! -d $2 ]]; then echo "Make directory $2..." && mkdir $2; fi;
   # Make link from `projectDir` to `htdocs/projectDir`
   ln -s `(cd $2 && pwd)` /opt/lampp/htdocs/$1
 
@@ -63,7 +63,7 @@ function add_host {
   printf "
 127.0.1.1 $1" >> /etc/hosts
 
-  echo "New host $1 from the directory $2 has been successfully added!"
+  echo -e "New host \033[32m$1\033[0m from the directory \033[32m$2\033[0m has been successfully added!"
 }
 
 
@@ -108,7 +108,7 @@ if [[ ! -z $1 ]]; then
       # Remove link from `htdocs`
       rm /opt/lampp/htdocs/$2
 
-      echo "Host $1 has been successfully removed!"
+      echo -e "Host \033[31m$2\033[0m has been successfully removed!"
 
     else
       echo "Wrong number of arguments have been entered."
