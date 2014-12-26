@@ -23,7 +23,7 @@ DEFAULT_COMMANDS="
 # Usage: check_sudo
 function check_sudo {
   if [ "$EUID" -ne 0 ]; then
-    echo "(!)You need to be root to perform this action."
+    echo "You need to be root to perform this action!"
     exit
   fi
 }
@@ -32,22 +32,24 @@ function check_sudo {
 # Usage: add_host <domain> <projectDir>
 function add_host {
   check_sudo
-  # If the directory doesn't exist, create it
-  if [[ ! -d $2 ]]; then echo "Make directory $2." && mkdir $2; fi;
-  # Make link from `projectDir` to `htdocs/projectDir`
-  ln -s `(cd $2 && pwd)` /opt/lampp/htdocs/$1
 
   echo "Please answer some questions or confirm default values:"
-  read -p "ServerAdmin (admin@$1): " ADMIN
-  read -p "ErrorLog (logs/$1-error_log): " ERROR_LOG
-  read -p "CustomLog (logs/$1-access_log): " ACCESS_LOG
+  read -p "? ServerAdmin (admin@$1): " ADMIN
+  read -p "? ErrorLog (logs/$1-error_log): " ERROR_LOG
+  read -p "? CustomLog (logs/$1-access_log): " ACCESS_LOG
 
   # If variables aren`t entered, set default values
   : ${ADMIN:="admin@$1"}
   : ${ERROR_LOG:="logs/$1-error_log"}
   : ${ACCESS_LOG:="logs/$1-access_log"}
 
+  # If the directory doesn't exist, create it
+  if [[ ! -d $2 ]]; then echo "Make directory $2" && mkdir $2; fi;
+  # Make link from `projectDir` to `htdocs/projectDir`
+  ln -s `(cd $2 && pwd)` /opt/lampp/htdocs/$1
+
   printf "
+# BEGIN $1
 <VirtualHost *:80>
 \tServerAdmin $ADMIN
 \tDocumentRoot \"/opt/lampp/htdocs/$1\"
@@ -55,11 +57,13 @@ function add_host {
 \tServerAlias www.$1
 \tErrorLog \"$ERROR_LOG\"
 \tCustomLog \"$ACCESS_LOG\" common
-</VirtualHost>" >> /opt/lampp/etc/extra/httpd-vhosts.conf
+</VirtualHost>
+# END $1" >> /opt/lampp/etc/extra/httpd-vhosts.conf
 
-  echo "127.0.1.1 $1" >> /etc/hosts
+  printf "
+127.0.1.1 $1" >> /etc/hosts
 
-  echo "New host $1 from the directory $2 has been successfully added."
+  echo "New host $1 from the directory $2 has been successfully added!"
 }
 
 
@@ -76,7 +80,7 @@ if [[ ! -z $1 ]]; then
     gksu /opt/lampp/manager-linux*.run &
 
   # Command for adding new hosts
-  # Usage: sudo xampp add <domain> <projectDir>
+  # Usage: sudo xampp add <domain> [projectDir]
   elif [[ $1 == "add" ]]; then
     # Check entered arguments
     case $# in
@@ -92,14 +96,39 @@ if [[ ! -z $1 ]]; then
         ;;
     esac
 
+  # Command for removing hosts
+  # Usage: sudo xampp remove <domain>
+  elif [[ $1 == "remove" ]]; then
+    if [[ $# -eq 2 ]]; then
+      check_sudo
+      # Remove host from `httpd-vhosts.conf`
+      sed "/# BEGIN $2/,/# END $2/d" -i /opt/lampp/etc/extra/httpd-vhosts.conf
+      # Remove host from `hosts`
+      sed "/^127.0.1.1 $2$/d" -i /etc/hosts
+      # Remove link from `htdocs`
+      rm /opt/lampp/htdocs/$2
+
+      echo "Host $1 has been successfully removed!"
+
+    else
+      echo "Wrong number of arguments have been entered."
+      exit
+    fi
+
   else
-    echo "Else case"
+    echo "Unknown command."
   fi
 
 # If arguments aren't entered, output help
 else
   echo "
 Usage: xampp <command>
+
+  add           Add new host to XAMPP
+                Usage: sudo xampp add <domain> [projectDir]
+
+  remove        Remove host from XAMPP
+                Usage: sudo xampp remove <domain>
 
   start         Start XAMPP (Apache, MySQL and eventually others)
   startapache   Start only Apache
