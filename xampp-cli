@@ -2,12 +2,14 @@
 #
 # XAMPP-CLI
 # ------------------------
-# Command line interface for a XAMPP
+# Command line interface for easier control XAMPP
 # 
 # Based on XAMPP (XAMPP Starter) by Ziyaddin Sadigov:
 # http://github.com/ziyaddin/xampp
 # 
 # Author: Denys Dovhan (email@denysdovhan.com)
+# Repo: https://github.com/denysdovhan/xampp-cli
+# Issues: https://github.com/denysdovhan/xampp-cli/issues
 # 
 
 
@@ -121,14 +123,16 @@ if [[ ! -z $1 ]]; then
 
 # If arguments aren't entered, output help
 else
-  echo "
-Usage: xampp <command>
+  echo -e "\
+Command line interface for easier control XAMPP.
+Usage: \033[2;37mxampp <command>\033[0m
 
+Available commands:
   add           Add new host to XAMPP
-                Usage: sudo xampp add <domain> [projectDir]
+                Usage: \033[2;37msudo xampp add <domain> [projectDir]\033[0m
 
   remove        Remove host from XAMPP
-                Usage: sudo xampp remove <domain>
+                Usage: \033[2;37msudo xampp remove <domain>\033[0m
 
   start         Start XAMPP (Apache, MySQL and eventually others)
   startapache   Start only Apache
@@ -154,5 +158,8 @@ Usage: xampp <command>
   oci8          Enable the oci8 extenssion
 
   gui           Graphic interface for XAMPP
+
+If you find an error or have questions, please report here:
+https://github.com/denysdovhan/xampp-cli/issues\
 "
 fi
