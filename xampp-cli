@@ -1,0 +1,165 @@
+#!/bin/bash
+#
+# XAMPP-CLI
+# ------------------------
+# Command line interface for easier control XAMPP
+# 
+# Based on XAMPP (XAMPP Starter) by Ziyaddin Sadigov:
+# http://github.com/ziyaddin/xampp
+# 
+# Author: Denys Dovhan (email@denysdovhan.com)
+# Repo: https://github.com/denysdovhan/xampp-cli
+# Issues: https://github.com/denysdovhan/xampp-cli/issues
+# 
+
+
+# Default commands
+DEFAULT_COMMANDS="
+  start  startapache  startmysql  startftp
+  stop   stopapache   stopmysql   stopftp 
+  reload reloadapache reloadmysql reloadftp
+  backup restart      security    oci8
+  enablessl disablessl"
+
+# Check if user have sudo access
+# Usage: check_sudo
+function check_sudo {
+  if [ "$EUID" -ne 0 ]; then
+    echo "You need to be root to perform this action!"
+    exit
+  fi
+}
+
+# Add new host to vhosts.conf
+# Usage: add_host <domain> <projectDir>
+function add_host {
+  check_sudo
+
+  echo "Please answer some questions or confirm default values:"
+  echo -en "\033[32m?\033[0m ServerAdmin \033[2;37m(admin@$1)\033[0m: " && read ADMIN
+  echo -en "\033[32m?\033[0m ErrorLog \033[2;37m(logs/$1-error_log)\033[0m: " && read ERROR_LOG
+  echo -en "\033[32m?\033[0m CustomLog \033[2;37m(logs/$1-access_log)\033[0m: " && read ACCESS_LOG
+
+  # If variables aren`t entered, set default values
+  : ${ADMIN:="admin@$1"}
+  : ${ERROR_LOG:="logs/$1-error_log"}
+  : ${ACCESS_LOG:="logs/$1-access_log"}
+
+  # If the directory doesn't exist, create it
+  if [[ ! -d $2 ]]; then echo "Make directory $2..." && mkdir $2; fi;
+  # Make link from `projectDir` to `htdocs/projectDir`
+  ln -s `(cd $2 && pwd)` /opt/lampp/htdocs/$1
+
+  printf "
+# BEGIN $1
+<VirtualHost *:80>
+\tServerAdmin $ADMIN
+\tDocumentRoot \"/opt/lampp/htdocs/$1\"
+\tServerName $1
+\tServerAlias www.$1
+\tErrorLog \"$ERROR_LOG\"
+\tCustomLog \"$ACCESS_LOG\" common
+</VirtualHost>
+# END $1" >> /opt/lampp/etc/extra/httpd-vhosts.conf
+
+  printf "
+127.0.1.1 $1" >> /etc/hosts
+
+  echo -e "New host \033[32m$1\033[0m from the directory \033[32m$2\033[0m has been successfully added!"
+}
+
+
+# Check if arguments entered
+if [[ ! -z $1 ]]; then
+
+  # If entered argument are default commands, execute them
+  if [[ $DEFAULT_COMMANDS =~ $1 ]]; then
+    /opt/lampp/lampp $1
+
+  # For `gui` run xampp-manager with gksu
+  # If this command has been started with sudo privileges, open the manager without gksu 
+  elif [[ $1 == "gui" ]]; then
+    gksu /opt/lampp/manager-linux*.run &
+
+  # Command for adding new hosts
+  # Usage: sudo xampp add <domain> [projectDir]
+  elif [[ $1 == "add" ]]; then
+    # Check entered arguments
+    case $# in
+      3 ) # sudo xammpp add <domain> <projectDir>
+        add_host $2 $3
+        ;;
+      2 ) # sudo xampp add <domain>
+        add_host $2 $2
+        ;;
+      * ) # Wrong number of arguments
+        echo "Wrong number of arguments have been entered."
+        exit
+        ;;
+    esac
+
+  # Command for removing hosts
+  # Usage: sudo xampp remove <domain>
+  elif [[ $1 == "remove" ]]; then
+    if [[ $# -eq 2 ]]; then
+      check_sudo
+      # Remove host from `httpd-vhosts.conf`
+      sed "/# BEGIN $2/,/# END $2/d" -i /opt/lampp/etc/extra/httpd-vhosts.conf
+      # Remove host from `hosts`
+      sed "/^127.0.1.1 $2$/d" -i /etc/hosts
+      # Remove link from `htdocs`
+      rm /opt/lampp/htdocs/$2
+
+      echo -e "Host \033[31m$2\033[0m has been successfully removed!"
+
+    else
+      echo "Wrong number of arguments have been entered."
+      exit
+    fi
+
+  else
+    echo "Unknown command."
+  fi
+
+# If arguments aren't entered, output help
+else
+  echo -e "\
+Command line interface for easier control XAMPP.
+Usage: \033[2;37mxampp <command>\033[0m
+
+Available commands:
+  add           Add new host to XAMPP
+                Usage: \033[2;37msudo xampp add <domain> [projectDir]\033[0m
+
+  remove        Remove host from XAMPP
+                Usage: \033[2;37msudo xampp remove <domain>\033[0m
+
+  start         Start XAMPP (Apache, MySQL and eventually others)
+  startapache   Start only Apache
+  startmysql    Start only MySQL
+  startftp      Start only ProFTPD
+
+  stop          Stop XAMPP (Apache, MySQL and eventually others)
+  stopapache    Stop only Apache
+  stopmysql     Stop only MySQL
+  stopftp       Stop only ProFTPD
+
+  reload        Reload XAMPP (Apache, MySQL and eventually others)
+  reloadapache  Reload only Apache
+  reloadmysql   Reload only MySQL
+  reloadftp     Reload only ProFTPD
+
+  enablessl     Enable SSL support for Apache
+  disablessl    Disable SSL support for Apache
+
+  restart       Stop and start XAMPP
+  security      Check XAMPP's security
+  backup        Make backup file of your XAMPP config, log and data files
+  oci8          Enable the oci8 extenssion
+
+  gui           Graphic interface for XAMPP
+
+If you find an error or have questions, please report here:
+https://github.com/denysdovhan/xampp-cli/issues\
+"
+fi
