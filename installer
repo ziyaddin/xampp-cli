@@ -21,6 +21,7 @@ then
       y|Y|YES|yes|Yes)
         
         #copying xampp file to /usr/bin
+        chmod +x xampp-cli
         sudo cp xampp-cli /usr/bin/xampp
         break
         ;;
