@@ -2,7 +2,7 @@
 #
 # XAMPP-CLI Installer - this script just copy xampp-cli file into /usr/bin/xampp
 # Based on XAMPP Starter:
-# https://github.com/ziyaddin/xampp/blob/master/installer
+# https://github.com/ziyaddin/xampp
 # 
 
 FILE="xampp-cli"

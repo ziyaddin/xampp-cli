@@ -3,11 +3,10 @@
 # XAMPP-CLI
 # ------------------------
 # Command line interface for easier control XAMPP
+#
+# Script Author: Ziyaddin Sadigov
+# Script URL: http://github.com/ziyaddin/xampp
 # 
-# Based on XAMPP (XAMPP Starter) by Ziyaddin Sadigov:
-# http://github.com/ziyaddin/xampp
-# 
-
 
 # Default commands
 DEFAULT_COMMANDS="
