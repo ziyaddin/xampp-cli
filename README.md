@@ -1,4 +1,4 @@
-# XAMPP-CLI
+# xampp-cli
 Command line interface for easier control XAMPP.
 
 ## Installation
@@ -8,7 +8,6 @@ cd /path/to/xampp-cli
 sh ./installer
 ```
 
-
 ## Help
 If you need help, open `Terminal` and type `xampp` without arguments. Available commands:
 * **add** - adds a new host from existing folder (Usage: `sudo xampp add <domain> [path/to/project]`). If directory `path/to/project` doesn't exist, it will be created. If you run this command with one argument, a new host will be added from a folder that has the same name (Usage: `sudo xampp add <domain>`). If directory `domain` doesn't exist, it will be created in current directory.
@@ -17,7 +16,8 @@ If you need help, open `Terminal` and type `xampp` without arguments. Available 
 * All default XAMPP commands (`start`, `startapache`, `startmysql`, `startftp`, `stop`, `stopapache`, `stopmysql`, `stopftp`, `reload`, `reloadapache`, `reloadmysql`, `reloadftp`, `backup`, `restart`, `security`, `oci8`, `enablessl`, `disablessl`).
 
 ## About
-This shell script is a fork to the [xampp](https://github.com/ziyaddin/xampp) by Ziyaddin Sadigov ([@zsadigov](http://twitter.com/zsadigov)).
+
+Copyright (C) 2015 Ziyaddin Sadigov ([@zsadigov](http://twitter.com/zsadigov)).
 
 Author only improved this script, adding commands 'add', 'remove' and 'gui'. Besides script has been optimized.
 
