@@ -22,8 +22,3 @@ This shell script is a fork to the [xampp](https://github.com/ziyaddin/xampp) by
 Author only improved this script, adding commands 'add', 'remove' and 'gui'. Besides script has been optimized.
 
 If you find an error or have questions, please report to [issues](https://github.com/denysdovhan/xampp-cli/issues).
-
-## Author
-Improved by [Denys Dovhan](https://github.com/denysdovhan) ([@denysdovhan](https://twitter.com/denysdovhan)).
-
-*Made with love in Ukraine.*
