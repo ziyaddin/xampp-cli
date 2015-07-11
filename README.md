@@ -15,10 +15,10 @@ If you need help, open `Terminal` and type `xampp` without arguments. Available 
 * **gui** - runs `manager-linux.run` or `manager-linux-x64.run`.
 * All default XAMPP commands (`start`, `startapache`, `startmysql`, `startftp`, `stop`, `stopapache`, `stopmysql`, `stopftp`, `reload`, `reloadapache`, `reloadmysql`, `reloadftp`, `backup`, `restart`, `security`, `oci8`, `enablessl`, `disablessl`).
 
+## Contribution
+
+If you find an error or have questions, please report to [issues](https://github.com/ziyaddin/xampp/issues).
+
 ## About
 
 Copyright (C) 2015 Ziyaddin Sadigov ([@zsadigov](http://twitter.com/zsadigov)).
-
-Author only improved this script, adding commands 'add', 'remove' and 'gui'. Besides script has been optimized.
-
-If you find an error or have questions, please report to [issues](https://github.com/denysdovhan/xampp-cli/issues).
