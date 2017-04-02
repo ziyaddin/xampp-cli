@@ -1,5 +1,5 @@
 # xampp-cli
->Command line interface for easier control XAMPP.
+>Command line interface for easier control XAMPP
 
 ## Installation
 Open your `Terminal`, go to folder where you downloaded **xammp-cli** and run `sh ./installer`:
