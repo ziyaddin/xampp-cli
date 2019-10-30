@@ -21,4 +21,4 @@ If you find an error or have questions, please report to [issues](https://github
 
 ## About
 
-Copyright (C) 2017 Ziyaddin Sadigov ([@zsadigov](http://twitter.com/zsadigov)).
+Copyright (C) 2019 Ziyaddin Sadigov ([@zsadigov](http://twitter.com/zsadigov)).
